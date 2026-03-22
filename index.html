@@ -107,13 +107,42 @@
         <button class="mobile-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
       </div>
     </div>
-    <div class="mobile-nav">
-      <a href="index.html" data-i18n="nav.home">Home</a>
-      <a href="services.html" data-i18n="nav.services">Services</a>
-      <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
-      <a href="work.html" data-i18n="nav.work">Work</a>
-      <a href="about.html" data-i18n="nav.about">Studio</a>
-      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+      <div class="mobile-drawer-overlay" data-drawer-close></div>
+      <div class="mobile-drawer-panel" role="dialog" aria-modal="true">
+        <div class="mobile-drawer-top">
+          <div class="mobile-drawer-title" data-i18n="nav.menu">Menu</div>
+          <button class="mobile-drawer-close" data-drawer-close aria-label="Close menu"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="mobile-drawer-links">
+          <a class="mobile-drawer-link" href="index.html" data-i18n="nav.home">Home</a>
+          <a class="mobile-drawer-link" href="services.html" data-i18n="nav.services">Services</a>
+          <a class="mobile-drawer-link" href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+          <a class="mobile-drawer-link" href="work.html" data-i18n="nav.work">Work</a>
+          <a class="mobile-drawer-link" href="case-studies.html" data-i18n="nav.case">Case Studies</a>
+          <a class="mobile-drawer-link" href="about.html" data-i18n="nav.about">Studio</a>
+          <a class="mobile-drawer-link" href="contact.html" data-i18n="nav.contact">Contact</a>
+        </div>
+
+        <div class="mobile-drawer-section">
+          <div class="mobile-drawer-section-title" data-i18n="nav.language">Language</div>
+          <div class="mobile-drawer-lang">
+            <div class="lang-option active" data-lang="en"><span class="lang-native">English</span><span class="lang-label">English</span></div>
+            <div class="lang-option" data-lang="ar"><span class="lang-native">العربية</span><span class="lang-label">Arabic</span></div>
+            <div class="lang-option" data-lang="fr"><span class="lang-native">Français</span><span class="lang-label">French</span></div>
+            <div class="lang-option" data-lang="es"><span class="lang-native">Español</span><span class="lang-label">Spanish</span></div>
+            <div class="lang-option" data-lang="de"><span class="lang-native">Deutsch</span><span class="lang-label">German</span></div>
+            <div class="lang-option" data-lang="it"><span class="lang-native">Italiano</span><span class="lang-label">Italian</span></div>
+            <div class="lang-option" data-lang="ja"><span class="lang-native">日本語</span><span class="lang-label">Japanese</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto;display:grid;gap:10px;">
+          <a href="contact.html" class="btn btn-primary" style="justify-content:center;" data-i18n="cta.book">Book a Call</a>
+          <a href="pricing.html" class="btn btn-secondary" style="justify-content:center;"><span data-i18n="cta.invest">Calculate My Investment</span></a>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -131,14 +160,14 @@
         <p class="hero-desc" data-i18n="hero.desc">While others sell you a $500 landing page, we deliver a high-converting demand engine that generates clients, builds authority, and compounds over time. That's the difference between a cost and an investment.</p>
         <div class="card" style="padding:16px 18px;margin-top:16px;background:rgba(255,255,255,0.04);">
           <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-            <span class="badge badge-primary" style="border-color:rgba(37,244,238,0.35);color:var(--accent);background:rgba(37,244,238,0.08);">Fast</span>
-            <span class="badge badge-primary" style="border-color:rgba(254,44,85,0.35);color:var(--primary);background:rgba(254,44,85,0.08);">Clear</span>
-            <span class="badge badge-primary" style="border-color:rgba(255,255,255,0.18);color:#fff;background:rgba(255,255,255,0.06);">Measurable</span>
+            <span class="badge badge-primary" style="border-color:rgba(37,244,238,0.35);color:var(--accent);background:rgba(37,244,238,0.08);" data-i18n="hero.quick.fast">Fast</span>
+            <span class="badge badge-primary" style="border-color:rgba(254,44,85,0.35);color:var(--primary);background:rgba(254,44,85,0.08);" data-i18n="hero.quick.clear">Clear</span>
+            <span class="badge badge-primary" style="border-color:rgba(255,255,255,0.18);color:#fff;background:rgba(255,255,255,0.06);" data-i18n="hero.quick.measurable">Measurable</span>
           </div>
           <ul class="text-sm" style="margin-top:12px;padding-left:18px;color:var(--text-muted);">
-            <li>Positioning + messaging that makes your offer obvious.</li>
-            <li>A premium site that loads fast and converts on mobile.</li>
-            <li>SEO + AI visibility signals (schema, structure, internal links).</li>
+            <li data-i18n="hero.quick.b1">Positioning + messaging that makes your offer obvious.</li>
+            <li data-i18n="hero.quick.b2">A premium site that loads fast and converts on mobile.</li>
+            <li data-i18n="hero.quick.b3">SEO + AI visibility signals (schema, structure, internal links).</li>
           </ul>
         </div>
 
@@ -279,12 +308,12 @@
   <section>
     <div class="container">
       <div class="glass fade-in" style="padding:48px;text-align:center;border-color:rgba(45,212,191,0.2);background:linear-gradient(135deg,rgba(45,212,191,0.08),rgba(129,140,248,0.04));">
-        <span class="badge badge-danger" style="margin-bottom:16px;"><i class="fas fa-exclamation-triangle"></i> Limited capacity — senior-led delivery (small batch)</span>
+        <span class="badge badge-danger" style="margin-bottom:16px;"><i class="fas fa-exclamation-triangle"></i> <span data-i18n="cta.capacity">Limited capacity — senior-led delivery (small batch)</span></span>
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.6rem);">Stop leaving revenue on the table.<br><span class="text-primary">Start building your demand engine.</span></h2>
         <p class="text-muted" style="margin-top:12px;max-width:600px;margin-inline:auto;">Every month you wait is another month your competitors are compounding their advantage.</p>
         <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
           <a href="contact.html" class="btn btn-primary btn-lg"><span data-i18n="cta.book">Book a Call</span> <i class="fas fa-arrow-right"></i></a>
-          <a href="pricing.html" class="btn btn-secondary btn-lg">Calculate My Investment</a>
+          <a href="pricing.html" class="btn btn-secondary btn-lg"><span data-i18n="cta.invest">Calculate My Investment</span></a>
         </div>
         <p class="text-xs text-muted" style="margin-top:16px;">Free discovery call · No commitment · Response within 24 hours</p>
       </div>

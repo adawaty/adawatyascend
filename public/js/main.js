@@ -213,15 +213,63 @@ function initTabs() {
   });
 }
 
-// ── Mobile Nav ──
+// ── Mobile Nav (Drawer) ──
 function initMobileNav() {
   const toggle = document.querySelector('.mobile-toggle');
-  const nav = document.querySelector('.mobile-nav');
-  if (toggle && nav) {
-    toggle.addEventListener('click', () => nav.classList.toggle('open'));
-    nav.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => nav.classList.remove('open'));
+  const drawer = document.querySelector('.mobile-drawer');
+
+  // Backward compatibility (older pages)
+  const legacyNav = document.querySelector('.mobile-nav');
+
+  function openDrawer() {
+    if (drawer) {
+      drawer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    } else if (legacyNav) {
+      legacyNav.classList.add('open');
+    }
+  }
+
+  function closeDrawer() {
+    if (drawer) {
+      drawer.classList.remove('open');
+      document.body.style.overflow = '';
+    } else if (legacyNav) {
+      legacyNav.classList.remove('open');
+    }
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const isOpen = drawer ? drawer.classList.contains('open') : (legacyNav?.classList.contains('open'));
+      if (isOpen) closeDrawer(); else openDrawer();
     });
+  }
+
+  if (drawer) {
+    drawer.querySelectorAll('a, .lang-option').forEach(el => {
+      el.addEventListener('click', (e) => {
+        // If language option was clicked, i18n.js handles reload; still close for UX.
+        if (el.classList.contains('lang-option')) {
+          // allow i18n click handler to run
+          setTimeout(closeDrawer, 50);
+          return;
+        }
+        closeDrawer();
+      });
+    });
+
+    drawer.querySelectorAll('[data-drawer-close], .mobile-drawer-overlay').forEach(el => {
+      el.addEventListener('click', closeDrawer);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  }
+
+  if (legacyNav) {
+    legacyNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
   }
 }
 

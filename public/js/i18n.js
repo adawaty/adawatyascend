@@ -40,6 +40,8 @@ const T = {
     'nav.case': 'Case Studies',
     'nav.about': 'Studio',
     'nav.contact': 'Contact',
+    'nav.menu': 'Menu',
+    'nav.language': 'Language',
     'hero.badge': 'Senior-led studio for Brand → Build → Demand',
     'hero.h1': 'We don\'t ship pages.',
     'hero.h1.span': 'We ship clarity + conversion.',
@@ -128,7 +130,19 @@ const T = {
     'cta.book': 'Book a Call',
     'cta.whatsapp': 'WhatsApp Us',
     'lang.label': 'Language',
-  },
+  
+    'hero.quick.fast': 'Fast',
+    'hero.quick.clear': 'Clear',
+    'hero.quick.measurable': 'Measurable',
+    'hero.quick.b1': 'Positioning + messaging that makes your offer obvious.',
+    'hero.quick.b2': 'A premium site that loads fast and converts on mobile.',
+    'hero.quick.b3': 'SEO + AI visibility signals (schema, structure, internal links).',
+    'cta.invest': 'Calculate My Investment',
+    'cta.capacity': 'Limited capacity — senior-led delivery (small batch)',
+    'pricing.breakdown': 'Breakdown',
+    'pricing.exportTitle': 'Export This Estimate',
+    'pricing.contactForm': 'Contact Form',
+},
   ar: {
     'site.name': 'أدواتي',
     'lead.label': 'تحميل مجاني',
@@ -158,6 +172,8 @@ const T = {
     'nav.case': 'دراسات حالة',
     'nav.about': 'عن أدواتي',
     'nav.contact': 'تواصل معنا',
+    'nav.menu': 'القائمة',
+    'nav.language': 'اللغة',
     'hero.badge': 'استوديو متكامل — العلامة ← البناء ← الطلب',
     'hero.h1': 'ما بنبني مواقع.',
     'hero.h1.span': 'بنبني أنظمة إيرادات.',
@@ -247,6 +263,18 @@ const T = {
     'pricing.monthly.sub': 'الاستضافة + النمو/الاحتفاظ',
     'pricing.timeline': 'الجدول الزمني',
     'pricing.timeline.sub': 'نطاق التسليم المقدر',
+
+    'hero.quick.fast': 'سريع',
+    'hero.quick.clear': 'واضح',
+    'hero.quick.measurable': 'قابل للقياس',
+    'hero.quick.b1': 'تحديد الموقع + الرسائل التي تجعل عرضك واضحًا.',
+    'hero.quick.b2': 'موقع متميز يحمل بسرعة ويتحول على الجوال.',
+    'hero.quick.b3': 'إشارات رؤية SEO + AI (المخطط، الهيكل، الروابط الداخلية).',
+    'cta.invest': 'احسب استثماري',
+    'cta.capacity': 'سعة محدودة — تسليم بقيادة كبار الخبراء (دفعة صغيرة)',
+    'pricing.breakdown': 'تفصيل',
+    'pricing.exportTitle': 'تصدير هذا التقدير',
+    'pricing.contactForm': 'نموذج الاتصال',
 },
   fr: {
     'site.name': 'Adawaty',
@@ -277,6 +305,8 @@ const T = {
     'nav.case': 'Études de cas',
     'nav.about': 'Studio',
     'nav.contact': 'Contact',
+    'nav.menu': 'Menu',
+    'nav.language': 'Langue',
     'hero.badge': 'Studio DFY Marque → Construire → Demande',
     'hero.h1': 'On ne construit pas de sites.',
     'hero.h1.span': 'On construit des systèmes de revenus.',
@@ -365,7 +395,19 @@ const T = {
     'work.title': 'Nos réalisations',
     'work.subtitle': 'Études de cas axées sur les résultats : conversion, visibilité, rapidité et adoption.',
     'footer.tagline': 'Marque → Construction → Demande. DFY pour fondateurs et équipes.',
-  },
+  
+    'hero.quick.fast': 'Rapide',
+    'hero.quick.clear': 'Clair',
+    'hero.quick.measurable': 'Mesurable',
+    'hero.quick.b1': 'Positionnement + message qui rendent votre offre évidente.',
+    'hero.quick.b2': 'Un site premium qui se charge rapidement et convertit sur mobile.',
+    'hero.quick.b3': 'SEO + signaux de visibilité IA (schéma, structure, liens internes).',
+    'cta.invest': 'Calculer Mon Investissement',
+    'cta.capacity': 'Capacité limitée — livraison dirigée par des seniors (petite série)',
+    'pricing.breakdown': 'Détail',
+    'pricing.exportTitle': 'Exporter Cette Estimation',
+    'pricing.contactForm': 'Formulaire de Contact',
+},
   es: {
     'site.name': 'Adawaty',
     'lead.label': 'Descarga gratis',
@@ -395,6 +437,8 @@ const T = {
     'nav.case': 'Casos de estudio',
     'nav.about': 'Estudio',
     'nav.contact': 'Contacto',
+    'nav.menu': 'Menú',
+    'nav.language': 'Idioma',
     'hero.badge': 'Estudio DFY Marca → Construir → Demanda',
     'hero.h1': 'No construimos sitios web.',
     'hero.h1.span': 'Construimos sistemas de ingresos.',
@@ -484,6 +528,18 @@ const T = {
     'work.title': 'Nuestro Trabajo',
     'work.subtitle': 'Estudios de caso basados en resultados: conversión, visibilidad, velocidad y adopción.',
     'footer.tagline': 'Marca → Construcción → Demanda. DFY para fundadores y equipos.',
+
+    'hero.quick.fast': 'Rápido',
+    'hero.quick.clear': 'Claro',
+    'hero.quick.measurable': 'Medible',
+    'hero.quick.b1': 'Posicionamiento + mensaje que hace que tu oferta sea obvia.',
+    'hero.quick.b2': 'Un sitio premium que carga rápido y convierte en móvil.',
+    'hero.quick.b3': 'SEO + señales de visibilidad AI (schema, estructura, enlaces internos).',
+    'cta.invest': 'Calcular Mi Inversión',
+    'cta.capacity': 'Capacidad limitada — entrega liderada por expertos (lote pequeño)',
+    'pricing.breakdown': 'Desglose',
+    'pricing.exportTitle': 'Exportar Esta Estimación',
+    'pricing.contactForm': 'Formulario de Contacto',
 },
   de: {
     'site.name': 'Adawaty',
@@ -495,6 +551,8 @@ const T = {
     'nav.case': 'Fallstudien',
     'nav.about': 'Studio',
     'nav.contact': 'Kontakt',
+    'nav.menu': 'Menü',
+    'nav.language': 'Sprache',
     'hero.badge': 'DFY Studio Marke → Aufbau → Nachfrage',
     'hero.h1': 'Wir bauen keine Websites.',
     'hero.h1.span': 'Wir bauen Umsatzsysteme.',
@@ -602,6 +660,18 @@ const T = {
     'work.title': 'Unsere Arbeit',
     'work.subtitle': 'Fallstudien, die auf Ergebnissen basieren: Conversion, Sichtbarkeit, Geschwindigkeit und Akzeptanz.',
     'footer.tagline': 'Brand → Build → Demand. DFY für Gründer und Teams.',
+
+    'hero.quick.fast': 'Schnell',
+    'hero.quick.clear': 'Klar',
+    'hero.quick.measurable': 'Messbar',
+    'hero.quick.b1': 'Positionierung + Botschaft, die Ihr Angebot offensichtlich macht.',
+    'hero.quick.b2': 'Eine Premium-Website, die schnell lädt und mobil konvertiert.',
+    'hero.quick.b3': 'SEO + KI-Sichtbarkeitssignale (Schema, Struktur, interne Links).',
+    'cta.invest': 'Meine Investition berechnen',
+    'cta.capacity': 'Begrenzte Kapazität — seniorengeführte Umsetzung (kleine Charge)',
+    'pricing.breakdown': 'Aufschlüsselung',
+    'pricing.exportTitle': 'Diese Schätzung exportieren',
+    'pricing.contactForm': 'Kontaktformular',
 },
 
   it: {
@@ -614,6 +684,8 @@ const T = {
     'nav.case': 'Casi studio',
     'nav.about': 'Studio',
     'nav.contact': 'Contatto',
+    'nav.menu': 'Menu',
+    'nav.language': 'Lingua',
     'hero.badge': 'Studio DFY Brand → Build → Demand',
     'hero.h1': 'Non costruiamo siti web.',
     'hero.h1.span': 'Costruiamo sistemi di fatturato.',
@@ -723,6 +795,18 @@ const T = {
     'footer.tagline': 'Brand → Build → Demand. DFY per fondatori e team.',
 
 
+
+    'hero.quick.fast': 'Veloce',
+    'hero.quick.clear': 'Chiaro',
+    'hero.quick.measurable': 'Misurabile',
+    'hero.quick.b1': 'Posizionamento + messaggi che rendono la tua offerta ovvia.',
+    'hero.quick.b2': 'Un sito premium che si carica velocemente e converte su mobile.',
+    'hero.quick.b3': 'SEO + segnali di visibilità AI (schema, struttura, link interni).',
+    'cta.invest': 'Calcola il mio investimento',
+    'cta.capacity': 'Capacità limitata — consegna guidata da senior (piccolo lotto)',
+    'pricing.breakdown': 'Dettaglio',
+    'pricing.exportTitle': 'Esporta questa stima',
+    'pricing.contactForm': 'Modulo di contatto',
 },
 
   ja: {
@@ -735,6 +819,8 @@ const T = {
     'nav.case': '事例紹介',
     'nav.about': 'スタジオ',
     'nav.contact': 'お問い合わせ',
+    'nav.menu': 'メニュー',
+    'nav.language': '言語',
     'hero.badge': 'DFY Brand → Build → Demand スタジオ',
     'hero.h1': '私たちはWebサイトを作るだけではありません。',
     'hero.h1.span': '売上を生む仕組みを作ります。',
@@ -842,6 +928,18 @@ const T = {
     'work.title': '私たちの実績',
     'work.subtitle': '成果に基づいたケーススタディ：コンバージョン、可視性、速度、採用。',
     'footer.tagline': 'ブランド → 構築 → 需要。創業者とチームのためのDFY。',
+
+    'hero.quick.fast': '高速',
+    'hero.quick.clear': '明確',
+    'hero.quick.measurable': '測定可能',
+    'hero.quick.b1': 'あなたのオファーを明確にするポジショニングとメッセージング。',
+    'hero.quick.b2': '高速に読み込まれ、モバイルでコンバージョンするプレミアムサイト。',
+    'hero.quick.b3': 'SEO + AIの可視化シグナル（スキーマ、構造、内部リンク）。',
+    'cta.invest': '投資額を計算する',
+    'cta.capacity': '限定キャパシティ — シニア主導の納品（少量生産）',
+    'pricing.breakdown': '内訳',
+    'pricing.exportTitle': 'この見積もりをエクスポート',
+    'pricing.contactForm': 'お問い合わせフォーム',
 }
 };
 
@@ -903,18 +1001,25 @@ function initI18n() {
       dropdown.classList.toggle('open');
     });
     document.addEventListener('click', () => dropdown.classList.remove('open'));
-    dropdown.querySelectorAll('.lang-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        setLang(opt.dataset.lang);
-        dropdown.classList.remove('open');
-        // Reload page to apply full translation
-        const url = new URL(window.location);
-        url.searchParams.set('lang', opt.dataset.lang);
-        window.location.href = url.toString();
-      });
-    });
   }
+
+  // Bind all language options (header dropdown + mobile drawer)
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const next = opt.dataset.lang;
+      if (!next) return;
+      setLang(next);
+      const dd = opt.closest('#lang-dropdown');
+      if (dd) dd.classList.remove('open');
+      // Reload page to apply full translation
+      const url = new URL(window.location);
+      url.searchParams.set('lang', next);
+      window.location.href = url.toString();
+    });
+  });
 }
+
 
 // Export
 window.AdaI18n = { t, getCurrentLang, setLang, initI18n, LANGS };
+
