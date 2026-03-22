@@ -258,7 +258,13 @@ function ensureMobileDrawer() {
       <button class="mobile-drawer-close" data-drawer-close aria-label="Close menu"><i class="fas fa-times"></i></button>
     </div>
 
-    <div class="mobile-drawer-section" style="margin-top:6px;">
+    <div class="mobile-drawer-links">
+      ${navLinks.map(l => `
+        <a class="mobile-drawer-link" href="${l.href}" ${l.labelKey ? `data-i18n="${l.labelKey}"` : ''}>${l.text || 'Link'}</a>
+      `).join('')}
+    </div>
+
+    <div class="mobile-drawer-section">
       <div class="mobile-drawer-section-title" data-i18n="nav.language">Language</div>
       <div class="mobile-drawer-lang">
         ${langKeys.map(code => {
@@ -269,16 +275,7 @@ function ensureMobileDrawer() {
       </div>
     </div>
 
-    <div class="mobile-drawer-section">
-      <div class="mobile-drawer-section-title">Navigate</div>
-      <div class="mobile-drawer-links">
-        ${navLinks.map(l => `
-          <a class="mobile-drawer-link" href="${l.href}" ${l.labelKey ? `data-i18n="${l.labelKey}"` : ''}>${l.text || 'Link'}</a>
-        `).join('')}
-      </div>
-    </div>
-
-    <div class="mobile-drawer-actions" style="margin-top:auto;display:grid;gap:10px;">
+    <div style="margin-top:auto;display:grid;gap:10px;">
       <a href="contact.html" class="btn btn-primary" style="justify-content:center;" data-i18n="cta.book">Book a Call</a>
       <a href="pricing.html" class="btn btn-secondary" style="justify-content:center;"><span data-i18n="cta.invest">Calculate My Investment</span></a>
     </div>
@@ -320,7 +317,6 @@ function initMobileNav() {
 
   // Permanent safety: always close on page restore/back-forward cache
   window.addEventListener('pageshow', closeDrawer);
-  window.addEventListener('pagehide', closeDrawer);
 
   // Close on fresh load
   closeDrawer();
@@ -333,10 +329,17 @@ function initMobileNav() {
   }
 
   if (drawer) {
-    // Links: close immediately, let browser navigate naturally
+    // Links: close first, then navigate (prevents sticky-open state on fast taps)
     drawer.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#')) {
+          closeDrawer();
+          return;
+        }
+        e.preventDefault();
         closeDrawer();
+        setTimeout(() => { window.location.href = href; }, 120);
       });
     });
 
