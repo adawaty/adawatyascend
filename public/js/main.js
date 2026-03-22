@@ -320,6 +320,7 @@ function initMobileNav() {
 
   // Permanent safety: always close on page restore/back-forward cache
   window.addEventListener('pageshow', closeDrawer);
+  window.addEventListener('pagehide', closeDrawer);
 
   // Close on fresh load
   closeDrawer();
@@ -332,17 +333,10 @@ function initMobileNav() {
   }
 
   if (drawer) {
-    // Links: close first, then navigate (prevents sticky-open state on fast taps)
+    // Links: close immediately, let browser navigate naturally
     drawer.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const href = a.getAttribute('href');
-        if (!href || href.startsWith('#')) {
-          closeDrawer();
-          return;
-        }
-        e.preventDefault();
+      a.addEventListener('click', () => {
         closeDrawer();
-        setTimeout(() => { window.location.href = href; }, 120);
       });
     });
 
