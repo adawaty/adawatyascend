@@ -185,12 +185,26 @@ function initAnimations() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        // Don't unobserve to keep animation on re-scroll
       }
     });
-  }, { threshold: 0.1, rootMargin: '-40px' });
-  
-  document.querySelectorAll('.fade-in, .stagger').forEach(el => observer.observe(el));
+  }, { threshold: 0.12, rootMargin: '-60px' });
+
+  document.querySelectorAll('.fade-in, .stagger, .reveal-up, .reveal-left, .reveal-right').forEach(el => {
+    // small deterministic stagger for ADHD-friendly scanning (predictable rhythm)
+    const i = Array.from(el.parentElement?.children || []).indexOf(el);
+    if (i >= 0) el.style.transitionDelay = `${Math.min(i * 70, 280)}ms`;
+    observer.observe(el);
+  });
+
+  // Lightweight parallax for hero glow (no heavy libs)
+  const hero = document.querySelector('.hero');
+  const glow = document.querySelector('.bg-glow');
+  if (hero && glow) {
+    window.addEventListener('scroll', () => {
+      const y = Math.min(window.scrollY, 900);
+      glow.style.transform = `translateY(${y * 0.06}px)`;
+    }, { passive: true });
+  }
 }
 
 // ── Tabs ──
@@ -213,8 +227,68 @@ function initTabs() {
   });
 }
 
+// ── Mobile Drawer Builder (reduces duplicated HTML) ──
+function ensureMobileDrawer() {
+  if (document.querySelector('.mobile-drawer')) return;
+
+  const { LANGS } = window.AdaI18n || { LANGS: {} };
+  const navLinks = Array.from(document.querySelectorAll('.nav-links a'))
+    .map(a => ({ href: a.getAttribute('href'), labelKey: a.getAttribute('data-i18n'), text: a.textContent.trim() }))
+    .filter(x => x.href);
+
+  const langKeys = Object.keys(LANGS || {}).length ? Object.keys(LANGS) : ['en','ar','fr','es','de','it','ja'];
+
+  const drawer = document.createElement('div');
+  drawer.className = 'mobile-drawer';
+  drawer.id = 'mobile-drawer';
+  drawer.setAttribute('aria-hidden', 'true');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'mobile-drawer-overlay';
+  overlay.setAttribute('data-drawer-close', '');
+
+  const panel = document.createElement('div');
+  panel.className = 'mobile-drawer-panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-modal', 'true');
+
+  panel.innerHTML = `
+    <div class="mobile-drawer-top">
+      <div class="mobile-drawer-title" data-i18n="nav.menu">Menu</div>
+      <button class="mobile-drawer-close" data-drawer-close aria-label="Close menu"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="mobile-drawer-links">
+      ${navLinks.map(l => `
+        <a class="mobile-drawer-link" href="${l.href}" ${l.labelKey ? `data-i18n="${l.labelKey}"` : ''}>${l.text || 'Link'}</a>
+      `).join('')}
+    </div>
+
+    <div class="mobile-drawer-section">
+      <div class="mobile-drawer-section-title" data-i18n="nav.language">Language</div>
+      <div class="mobile-drawer-lang">
+        ${langKeys.map(code => {
+          const native = (LANGS && LANGS[code]?.native) || code.toUpperCase();
+          const label = (LANGS && LANGS[code]?.label) || native;
+          return `<div class="lang-option" data-lang="${code}"><span class="lang-native">${native}</span><span class="lang-label">${label}</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div style="margin-top:auto;display:grid;gap:10px;">
+      <a href="contact.html" class="btn btn-primary" style="justify-content:center;" data-i18n="cta.book">Book a Call</a>
+      <a href="pricing.html" class="btn btn-secondary" style="justify-content:center;"><span data-i18n="cta.invest">Calculate My Investment</span></a>
+    </div>
+  `;
+
+  drawer.appendChild(overlay);
+  drawer.appendChild(panel);
+  document.body.appendChild(drawer);
+}
+
 // ── Mobile Nav (Drawer) ──
 function initMobileNav() {
+  ensureMobileDrawer();
   const toggle = document.querySelector('.mobile-toggle');
   const drawer = document.querySelector('.mobile-drawer');
 
@@ -224,6 +298,7 @@ function initMobileNav() {
   function openDrawer() {
     if (drawer) {
       drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     } else if (legacyNav) {
       legacyNav.classList.add('open');
@@ -233,11 +308,18 @@ function initMobileNav() {
   function closeDrawer() {
     if (drawer) {
       drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     } else if (legacyNav) {
       legacyNav.classList.remove('open');
     }
   }
+
+  // Permanent safety: always close on page restore/back-forward cache
+  window.addEventListener('pageshow', closeDrawer);
+
+  // Close on fresh load
+  closeDrawer();
 
   if (toggle) {
     toggle.addEventListener('click', () => {
@@ -247,16 +329,23 @@ function initMobileNav() {
   }
 
   if (drawer) {
-    drawer.querySelectorAll('a, .lang-option').forEach(el => {
-      el.addEventListener('click', (e) => {
-        // If language option was clicked, i18n.js handles reload; still close for UX.
-        if (el.classList.contains('lang-option')) {
-          // allow i18n click handler to run
-          setTimeout(closeDrawer, 50);
+    // Links: close first, then navigate (prevents sticky-open state on fast taps)
+    drawer.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#')) {
+          closeDrawer();
           return;
         }
+        e.preventDefault();
         closeDrawer();
+        setTimeout(() => { window.location.href = href; }, 120);
       });
+    });
+
+    // Language options: i18n.js reloads the page; we just close immediately for UX.
+    drawer.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', () => setTimeout(closeDrawer, 50));
     });
 
     drawer.querySelectorAll('[data-drawer-close], .mobile-drawer-overlay').forEach(el => {
@@ -294,7 +383,7 @@ function initBackToTop() {
 // ── Active Nav Link ──
 function setActiveNav() {
   const path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(a => {
+  document.querySelectorAll('.nav-links a, .mobile-nav a, .mobile-drawer-link').forEach(a => {
     const href = a.getAttribute('href');
     if (href === path || (path === 'index.html' && href === 'index.html')) {
       a.classList.add('active');
