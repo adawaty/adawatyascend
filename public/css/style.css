@@ -223,7 +223,7 @@ a:hover { color: #fff; }
   right: 0;
   height: 100%;
   width: min(92vw, 380px);
-  padding: 18px 18px calc(22px + env(safe-area-inset-bottom));
+  padding: 18px 18px calc(260px + env(safe-area-inset-bottom));
   background: #06070c;
   border-left: 1px solid rgba(255,255,255,0.10);
   box-shadow: 0 20px 80px rgba(0,0,0,0.75);
@@ -307,6 +307,7 @@ a:hover { color: #fff; }
 .mobile-drawer-lang {
   display: grid;
   gap: 6px;
+  padding-bottom: 220px; /* keeps languages above PiP/video overlays */
 }
 .mobile-drawer-lang .lang-option {
   border: 1px solid rgba(255,255,255,0.10);
