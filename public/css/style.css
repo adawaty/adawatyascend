@@ -213,8 +213,8 @@ a:hover { color: #fff; }
 .mobile-drawer-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.62);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(10px);
 }
 
 .mobile-drawer-panel {
@@ -223,15 +223,18 @@ a:hover { color: #fff; }
   right: 0;
   height: 100%;
   width: min(92vw, 380px);
-  padding: 18px 18px 22px;
-  background: rgba(10,10,14,0.92);
-  border-left: 1px solid var(--border);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  padding: 18px 18px calc(22px + env(safe-area-inset-bottom));
+  background: #06070c;
+  border-left: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 20px 80px rgba(0,0,0,0.75);
   transform: translateX(100%);
   transition: transform var(--transition);
   display: flex;
   flex-direction: column;
   gap: 14px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  isolation: isolate;
 }
 .mobile-drawer.open .mobile-drawer-panel { transform: translateX(0); }
 
@@ -279,10 +282,10 @@ a:hover { color: #fff; }
   justify-content: space-between;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  background: #0b0d14;
   color: #fff;
-  font-weight: 650;
+  font-weight: 750;
 }
 .mobile-drawer-link span { color: #fff; }
 .mobile-drawer-link:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.07); }
@@ -306,11 +309,14 @@ a:hover { color: #fff; }
   gap: 6px;
 }
 .mobile-drawer-lang .lang-option {
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 16px;
-  background: rgba(255,255,255,0.03);
+  background: #0b0d14;
+  color: #fff;
 }
-.mobile-drawer-lang .lang-option:hover { background: rgba(255,255,255,0.06); }
+.mobile-drawer-lang .lang-option .lang-native { color: #fff; }
+.mobile-drawer-lang .lang-option .lang-label { color: rgba(255,255,255,0.70); }
+.mobile-drawer-lang .lang-option:hover { background: #0f1220; }
 
 @media (max-width: 768px) {
   .nav-links, .nav-right .btn:not(.btn-icon), .nav-right .lang-switcher { display: none; }
@@ -407,7 +413,18 @@ section { padding: 60px 0; }
   font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase;
   color: var(--primary); opacity: 0.8;
 }
-.section-title { margin-top: 8px; }
+.section-title { margin-top: 8px; position: relative; display: inline-block; }
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 64px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: 0 0 24px rgba(254,44,85,0.22);
+}
 .section-subtitle { margin-top: 10px; max-width: 640px; font-size: 1rem; }
 
 /* ── Grid ── */
@@ -634,10 +651,23 @@ section { padding: 60px 0; }
 
 /* ── Page-specific ── */
 .service-icon {
-  width: 48px; height: 48px; border-radius: 14px;
-  background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.2);
-  display: grid; place-items: center; color: var(--primary);
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(45,212,191,0.1);
+  border: 1px solid rgba(45,212,191,0.2);
+  display: grid;
+  place-items: center;
+  color: #fff;
 }
+
+/* Borrowed vibe from Sonicourses: bold, colorful tiles */
+.grid-3 .card:nth-child(1) .service-icon { background: linear-gradient(135deg, rgba(254,44,85,0.95), rgba(254,44,85,0.25)); border-color: rgba(254,44,85,0.35); }
+.grid-3 .card:nth-child(2) .service-icon { background: linear-gradient(135deg, rgba(37,244,238,0.95), rgba(37,244,238,0.22)); border-color: rgba(37,244,238,0.35); }
+.grid-3 .card:nth-child(3) .service-icon { background: linear-gradient(135deg, rgba(167,139,250,0.95), rgba(167,139,250,0.22)); border-color: rgba(167,139,250,0.35); }
+.grid-3 .card:nth-child(4) .service-icon { background: linear-gradient(135deg, rgba(251,191,36,0.95), rgba(251,191,36,0.18)); border-color: rgba(251,191,36,0.35); }
+.grid-3 .card:nth-child(5) .service-icon { background: linear-gradient(135deg, rgba(52,211,153,0.95), rgba(52,211,153,0.18)); border-color: rgba(52,211,153,0.35); }
+.grid-3 .card:nth-child(6) .service-icon { background: linear-gradient(135deg, rgba(248,113,113,0.95), rgba(248,113,113,0.18)); border-color: rgba(248,113,113,0.35); }
 .step-number {
   font-size: 2.5rem; font-weight: 900; color: rgba(255,255,255,0.05);
   position: absolute; top: 16px; right: 16px; font-family: var(--font-display);
