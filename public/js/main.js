@@ -181,6 +181,7 @@ function generateSerial() {
 
 // ── Scroll Animations ──
 function initAnimations() {
+  // NOTE: Predictable, scannable motion (ADHD-friendly).
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -418,6 +419,57 @@ function initMobileNav() {
 }
 
 // ── Back to Top ──
+// ── Depth Motion (3D tilt + parallax) ──
+function initDepthMotion() {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  const els = Array.from(document.querySelectorAll('[data-tilt]'));
+  if (!els.length) return;
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  els.forEach(el => {
+    el.classList.add('tilt');
+
+    let raf = 0;
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      const ry = clamp((x - 0.5) * 10, -7, 7);
+      const rx = clamp(-(y - 0.5) * 10, -7, 7);
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+        el.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+        el.style.setProperty('--tz', '0px');
+      });
+    };
+
+    const onLeave = () => {
+      if (raf) cancelAnimationFrame(raf);
+      el.style.setProperty('--rx', '0deg');
+      el.style.setProperty('--ry', '0deg');
+    };
+
+    el.addEventListener('pointermove', onMove, { passive: true });
+    el.addEventListener('pointerleave', onLeave, { passive: true });
+  });
+
+  // Page-level parallax for background glow/grid (subtle)
+  const glow = document.querySelector('.bg-glow');
+  const grid = document.querySelector('.bg-grid');
+  if (glow || grid) {
+    window.addEventListener('scroll', () => {
+      const y = Math.min(window.scrollY || 0, 1400);
+      if (glow) glow.style.transform = `translateY(${y * 0.05}px)`;
+      if (grid) grid.style.transform = `translateY(${y * 0.02}px)`;
+    }, { passive: true });
+  }
+}
+
+// ── Back to Top ──
 function initBackToTop() {
   const btn = document.createElement('button');
   btn.className = 'btn btn-icon btn-secondary no-print';
@@ -571,6 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations();
   initTabs();
   initMobileNav();
+  initDepthMotion();
   initBackToTop();
   setActiveNav();
   

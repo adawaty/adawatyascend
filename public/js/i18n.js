@@ -991,31 +991,133 @@ function updateLangUI() {
 function initI18n() {
   const lang = getCurrentLang();
   setLang(lang);
-  
-  // Lang dropdown toggle
-  const toggle = document.getElementById('lang-toggle');
-  const dropdown = document.getElementById('lang-dropdown');
-  if (toggle && dropdown) {
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle('open');
+
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+
+  // Build a mobile bottom sheet for language selection
+  function ensureLangSheet() {
+    if (document.getElementById('lang-sheet')) return;
+
+    const sheet = document.createElement('div');
+    sheet.className = 'lang-sheet';
+    sheet.id = 'lang-sheet';
+    sheet.setAttribute('aria-hidden', 'true');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'lang-sheet-overlay';
+    overlay.setAttribute('data-lang-close', '');
+
+    const panel = document.createElement('div');
+    panel.className = 'lang-sheet-panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+
+    const options = Object.keys(LANGS).map(code => {
+      const native = LANGS[code]?.native || code.toUpperCase();
+      const label = LANGS[code]?.label || native;
+      return `<div class="lang-option" data-lang="${code}"><span class="lang-native">${native}</span><span class="lang-label">${label}</span></div>`;
+    }).join('');
+
+    panel.innerHTML = `
+      <div class="lang-sheet-top">
+        <div class="lang-sheet-title" data-i18n="lang.label">Language</div>
+        <button class="lang-sheet-close" data-lang-close aria-label="Close"><span style="font-size:18px;line-height:1;">✕</span></button>
+      </div>
+      <div class="lang-sheet-options">${options}</div>
+    `;
+
+    sheet.appendChild(overlay);
+    sheet.appendChild(panel);
+    document.body.appendChild(sheet);
+
+    // Translate sheet title (in case language already set)
+    sheet.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      el.textContent = t(key);
     });
-    document.addEventListener('click', () => dropdown.classList.remove('open'));
   }
 
-  // Bind all language options (header dropdown + mobile drawer)
-  document.querySelectorAll('.lang-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      const next = opt.dataset.lang;
-      if (!next) return;
-      setLang(next);
-      const dd = opt.closest('#lang-dropdown');
-      if (dd) dd.classList.remove('open');
-      // Reload page to apply full translation
-      const url = new URL(window.location);
-      url.searchParams.set('lang', next);
-      window.location.href = url.toString();
+  function openLangSheet() {
+    ensureLangSheet();
+    const sheet = document.getElementById('lang-sheet');
+    if (!sheet) return;
+    sheet.classList.add('open');
+    sheet.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('nav-open');
+    const first = sheet.querySelector('.lang-option');
+    setTimeout(() => first?.scrollIntoView({ block: 'nearest' }), 0);
+  }
+
+  function closeLangSheet() {
+    const sheet = document.getElementById('lang-sheet');
+    if (!sheet) return;
+    sheet.classList.remove('open');
+    sheet.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('nav-open');
+  }
+
+  // Lang toggle behavior:
+  // - Desktop: popover dropdown
+  // - Mobile: bottom sheet
+  const toggle = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  if (toggle) {
+    toggle.setAttribute('aria-haspopup', 'dialog');
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+        openLangSheet();
+        return;
+      }
+      if (dropdown) dropdown.classList.toggle('open');
     });
+  }
+
+  // Close interactions
+  document.addEventListener('click', (e) => {
+    const sheet = document.getElementById('lang-sheet');
+    const clickedClose = e.target && e.target.closest && e.target.closest('[data-lang-close]');
+    if (clickedClose) {
+      closeLangSheet();
+      return;
+    }
+    if (sheet && sheet.classList.contains('open')) {
+      // only close if user clicked the overlay
+      if (e.target === sheet.querySelector('.lang-sheet-overlay')) closeLangSheet();
+      return;
+    }
+
+    // Desktop dropdown close when clicking outside
+    if (dropdown && dropdown.classList.contains('open')) {
+      const within = e.target && e.target.closest && (e.target.closest('#lang-dropdown') || e.target.closest('#lang-toggle'));
+      if (!within) dropdown.classList.remove('open');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (dropdown) dropdown.classList.remove('open');
+      closeLangSheet();
+    }
+  });
+
+  // Language selection (event delegation) for all .lang-option instances
+  document.addEventListener('click', (e) => {
+    const opt = e.target && e.target.closest ? e.target.closest('.lang-option') : null;
+    if (!opt) return;
+
+    const next = opt.dataset.lang;
+    if (!next) return;
+
+    setLang(next);
+    if (dropdown) dropdown.classList.remove('open');
+    closeLangSheet();
+
+    // Reload page to apply full translation
+    const url = new URL(window.location);
+    url.searchParams.set('lang', next);
+    window.location.href = url.toString();
   });
 }
 
