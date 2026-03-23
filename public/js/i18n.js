@@ -3,12 +3,7 @@
    ═══════════════════════════════════════════ */
 const LANGS = {
   en: { native: 'English', label: 'English', dir: 'ltr' },
-  'ar': { native: 'العربية', label: 'Arabic', dir: 'rtl' },
-  fr: { native: 'Français', label: 'French', dir: 'ltr' },
-  es: { native: 'Español', label: 'Spanish', dir: 'ltr' },
-  de: { native: 'Deutsch', label: 'German', dir: 'ltr' },
-  it: { native: 'Italiano', label: 'Italian', dir: 'ltr' },
-  ja: { native: '日本語', label: 'Japanese', dir: 'ltr' }
+  ar: { native: 'العربية', label: 'العربية', dir: 'rtl' }
 };
 const T = {
   en: {
@@ -142,6 +137,33 @@ const T = {
     'pricing.breakdown': 'Breakdown',
     'pricing.exportTitle': 'Export This Estimate',
     'pricing.contactForm': 'Contact Form',
+    'stats.caption': 'What our clients actually achieve',
+    'cta.services': 'View All Services',
+    'cta2.headline': 'Stop leaving revenue on the table.<br><span class="text-primary">Start building your demand engine.</span>',
+    'cta2.sub': 'Every month you wait is another month your competitors are compounding their advantage.',
+    'cta2.note': 'Free discovery call · No commitment · Response within 24 hours',
+    'contact.form.title': 'Contact Form',
+    'contact.service.select': 'Select a service...',
+    'contact.service.brand': 'Brand Intelligence & Positioning',
+    'contact.service.web': 'DFY Website Build',
+    'contact.service.visibility': 'Search + AI Visibility (SEO/AEO)',
+    'contact.service.content': 'Content Engine',
+    'contact.service.apps': 'Apps & Internal Systems',
+    'contact.service.full': 'Full Brand → Build → Demand Package',
+    'contact.service.unsure': 'Not sure yet',
+    'contact.orEmail': 'Or email:',
+    'contact.info': 'Contact Info',
+    'contact.direct': 'Direct Lines',
+    'contact.whatsapp': 'WhatsApp',
+    'contact.phoneLabel': 'Phone',
+    'contact.emailLabel': 'Email',
+    'footer.email': 'Email',
+    'footer.call': 'Call',
+    'footer.studio': 'Studio',
+    'footer.services': 'Services',
+    'footer.getStarted': 'Get Started',
+    'footer.pricingCalc': 'Pricing Calculator',
+    'footer.desc': 'Elite DFY studio delivering Brand → Build → Demand: positioning, identity, premium websites, content workflows, and Search + AI Visibility.',
 },
   ar: {
     'site.name': 'أدواتي',
@@ -275,6 +297,34 @@ const T = {
     'pricing.breakdown': 'تفصيل',
     'pricing.exportTitle': 'تصدير هذا التقدير',
     'pricing.contactForm': 'نموذج الاتصال',
+    'stats.caption': 'النتائج اللي بيحققها عملاؤنا فعليًا',
+    'cta.services': 'شوف كل الخدمات',
+    'cta2.headline': 'بطل تسيب الإيراد على الطاولة.<br><span class="text-primary">ابدأ تبني محرك الطلب بتاعك.</span>',
+    'cta2.sub': 'كل شهر بتستنى فيه هو شهر منافسينك بيضاعفوا فيه مكسبهم.',
+    'cta2.note': 'مكالمة استكشاف مجانية · بدون التزام · رد خلال 24 ساعة',
+
+    'contact.form.title': 'نموذج التواصل',
+    'contact.service.select': 'اختر الخدمة...',
+    'contact.service.brand': 'ذكاء العلامة والتموضع',
+    'contact.service.web': 'تنفيذ موقع DFY',
+    'contact.service.visibility': 'الظهور في البحث والـ AI (SEO/AEO)',
+    'contact.service.content': 'محرك المحتوى',
+    'contact.service.apps': 'تطبيقات وأنظمة داخلية',
+    'contact.service.full': 'باكدج العلامة ← البناء ← الطلب',
+    'contact.service.unsure': 'مش متأكد لسه',
+    'contact.orEmail': 'أو على البريد:',
+    'contact.info': 'بيانات التواصل',
+    'contact.direct': 'خطوط مباشرة',
+    'contact.whatsapp': 'واتساب',
+    'contact.phoneLabel': 'هاتف',
+    'contact.emailLabel': 'البريد',
+
+    'footer.email': 'البريد',
+    'footer.call': 'اتصال',
+    'footer.studio': 'الاستوديو',
+    'footer.services': 'الخدمات',
+    'footer.getStarted': 'ابدأ',
+    'footer.pricingCalc': 'حاسبة التسعير',
 },
   fr: {
     'site.name': 'Adawaty',
@@ -950,9 +1000,11 @@ function t(key) {
 }
 
 function getCurrentLang() {
-  return localStorage.getItem('adawaty_lang') || 
-         new URLSearchParams(window.location.search).get('lang') || 
-         'en';
+  const raw = localStorage.getItem('adawaty_lang') ||
+              new URLSearchParams(window.location.search).get('lang') ||
+              'en';
+  // Only allow languages we actually support end-to-end.
+  return LANGS[raw] ? raw : 'en';
 }
 
 function setLang(lang) {
@@ -1014,8 +1066,7 @@ function initI18n() {
 
     const options = Object.keys(LANGS).map(code => {
       const native = LANGS[code]?.native || code.toUpperCase();
-      const label = LANGS[code]?.label || native;
-      return `<div class="lang-option" data-lang="${code}"><span class="lang-native">${native}</span><span class="lang-label">${label}</span></div>`;
+      return `<div class="lang-option" data-lang="${code}"><span class="lang-native">${native}</span></div>`;
     }).join('');
 
     panel.innerHTML = `
@@ -1056,11 +1107,32 @@ function initI18n() {
     document.body.classList.remove('nav-open');
   }
 
+  // Build desktop dropdown options dynamically (prevents hardcoded English)
+  function ensureDesktopDropdown() {
+    const dropdown = document.getElementById('lang-dropdown');
+    if (!dropdown) return null;
+    if (dropdown.dataset.built === '1') return dropdown;
+
+    dropdown.innerHTML = Object.keys(LANGS).map(code => {
+      const native = LANGS[code]?.native || code.toUpperCase();
+      const label = LANGS[code]?.label || native;
+      // Show native only to avoid English traces inside the switcher UI.
+      return `
+        <div class="lang-option" data-lang="${code}">
+          <span class="lang-native">${native}</span>
+        </div>
+      `;
+    }).join('');
+
+    dropdown.dataset.built = '1';
+    return dropdown;
+  }
+
   // Lang toggle behavior:
   // - Desktop: popover dropdown
   // - Mobile: bottom sheet
   const toggle = document.getElementById('lang-toggle');
-  const dropdown = document.getElementById('lang-dropdown');
+  let dropdown = ensureDesktopDropdown();
   if (toggle) {
     toggle.setAttribute('aria-haspopup', 'dialog');
     toggle.addEventListener('click', (e) => {
@@ -1070,6 +1142,7 @@ function initI18n() {
         openLangSheet();
         return;
       }
+      dropdown = ensureDesktopDropdown();
       if (dropdown) dropdown.classList.toggle('open');
     });
   }
@@ -1125,3 +1198,5 @@ function initI18n() {
 // Export
 window.AdaI18n = { t, getCurrentLang, setLang, initI18n, LANGS };
 
+
+// ── Added for ADHD-simplified pages 
