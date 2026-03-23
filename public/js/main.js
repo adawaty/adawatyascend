@@ -229,6 +229,8 @@ function initTabs() {
 
 // ── Mobile Drawer Builder (reduces duplicated HTML) ──
 function ensureMobileDrawer() {
+  // Build only on small screens and only once
+
   if (document.querySelector('.mobile-drawer')) return;
 
   const { LANGS } = window.AdaI18n || { LANGS: {} };
@@ -295,13 +297,52 @@ function initMobileNav() {
   // Backward compatibility (older pages)
   const legacyNav = document.querySelector('.mobile-nav');
 
+  const BREAKPOINT = 768;
+  let lastFocus = null;
+
+  function isOpen() {
+    return drawer ? drawer.classList.contains('open') : !!legacyNav?.classList.contains('open');
+  }
+
+  function lockScroll() {
+    document.body.classList.add('nav-open');
+  }
+
+  function unlockScroll() {
+    document.body.classList.remove('nav-open');
+  }
+
+  function trapFocus(e) {
+    if (!drawer || !isOpen() || e.key !== 'Tab') return;
+    const focusables = Array.from(drawer.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'))
+      .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
   function openDrawer() {
+    lastFocus = document.activeElement;
+
     if (drawer) {
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+      lockScroll();
+      toggle?.setAttribute('aria-expanded', 'true');
+
+      const firstFocusable = drawer.querySelector('button, a');
+      setTimeout(() => firstFocusable?.focus(), 0);
+      document.addEventListener('keydown', trapFocus);
     } else if (legacyNav) {
       legacyNav.classList.add('open');
+      lockScroll();
     }
   }
 
@@ -309,22 +350,36 @@ function initMobileNav() {
     if (drawer) {
       drawer.classList.remove('open');
       drawer.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      unlockScroll();
+      toggle?.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', trapFocus);
+      if (lastFocus && typeof lastFocus.focus === 'function') setTimeout(() => lastFocus.focus(), 0);
     } else if (legacyNav) {
       legacyNav.classList.remove('open');
+      unlockScroll();
     }
   }
 
   // Permanent safety: always close on page restore/back-forward cache
   window.addEventListener('pageshow', closeDrawer);
 
+  // Safety: close when app focus changes or viewport changes
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) closeDrawer();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > BREAKPOINT && isOpen()) closeDrawer();
+  });
+  window.addEventListener('orientationchange', () => setTimeout(closeDrawer, 0));
+
   // Close on fresh load
   closeDrawer();
 
   if (toggle) {
+    toggle.setAttribute('aria-controls', 'mobile-drawer');
+    toggle.setAttribute('aria-expanded', 'false');
     toggle.addEventListener('click', () => {
-      const isOpen = drawer ? drawer.classList.contains('open') : (legacyNav?.classList.contains('open'));
-      if (isOpen) closeDrawer(); else openDrawer();
+      if (isOpen()) closeDrawer(); else openDrawer();
     });
   }
 

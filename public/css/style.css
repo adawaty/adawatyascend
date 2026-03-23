@@ -49,6 +49,13 @@ body {
   min-height: 100vh;
 }
 
+/* Prevent background scroll when drawer open */
+body.nav-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 /* RTL Support */
 [dir="rtl"] { direction: rtl; text-align: right; }
 [dir="rtl"] .hero-ctas { flex-direction: row-reverse; }
@@ -223,7 +230,7 @@ a:hover { color: #fff; }
   right: 0;
   height: 100%;
   width: min(92vw, 380px);
-  padding: 18px 18px calc(22px + env(safe-area-inset-bottom));
+  padding: calc(18px + env(safe-area-inset-top)) 18px calc(22px + env(safe-area-inset-bottom));
   background: #06070c;
   border-left: 1px solid rgba(255,255,255,0.10);
   box-shadow: 0 20px 80px rgba(0,0,0,0.75);
@@ -319,8 +326,10 @@ a:hover { color: #fff; }
 .mobile-drawer-lang .lang-option:hover { background: #0f1220; }
 
 @media (max-width: 768px) {
-  .nav-links, .nav-right .btn:not(.btn-icon), .nav-right .lang-switcher { display: none; }
+  .nav-links, .nav-right .btn:not(.btn-icon) { display: none; }
+  .nav-right .lang-switcher { display: block; }
   .mobile-toggle { display: block; }
+  .lang-btn { padding: 8px 10px; min-width: 44px; }
 }
 
 /* ── Language Switcher ── */
